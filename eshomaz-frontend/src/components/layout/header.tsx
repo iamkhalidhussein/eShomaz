@@ -2,6 +2,7 @@ import { Home, Users, MessageCircle, Bell, Menu, Search } from 'lucide-react';
 import { NavItem } from '@/components/layout/nav-item';
 import { userData } from '@/data/mock-data';
 import { Link } from 'react-router-dom';
+import { useKindeAuth } from '@kinde-oss/kinde-auth-react';
 
 interface HeaderProps {
     currentPage: string;
@@ -9,6 +10,9 @@ interface HeaderProps {
 };
 
 export const Header = ({ currentPage, setCurrentPage }: HeaderProps) => {
+    const { user, isAuthenticated } = useKindeAuth();
+    // logout()
+    console.log(user, isAuthenticated)
     return (
         <header className="bg-white shadow-md fixed w-full top-0 z-50">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">

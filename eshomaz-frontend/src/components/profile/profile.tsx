@@ -15,26 +15,47 @@ interface ProfileProps {
 export const Profile = ({ user, onEditClick }: ProfileProps) => {
     return (
         <div className="max-w-4xl mx-auto">
-        {/* Cover Photo */}
+        <CoverPhoto coverPhoto={user.coverPhoto}/>
+
+        <ProfileInfo user={user} onEditClick={onEditClick}/>
+
+        <div className="mt-6">
+            <h3 className="text-xl font-bold mb-4">Posts</h3>
+            {userPosts.map(post => (
+            <Post key={post.id} post={post} />
+            ))}
+        </div>
+    </div>
+    )
+};
+
+interface CoverPhotoProps {
+    coverPhoto: string
+};
+const CoverPhoto = ({ coverPhoto }: CoverPhotoProps) => {
+    return (
         <div className="relative h-80 rounded-lg overflow-hidden mb-4">
             <img
-            src={user.coverPhoto}
-            alt="Cover"
-            className="w-full h-full object-cover"
+                src={coverPhoto}
+                alt="Cover"
+                className="w-full h-full object-cover"
             />
             <button className="absolute bottom-4 right-4 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100">
-            <Camera className="h-5 w-5 text-gray-600" />
+                <Camera className="h-5 w-5 text-gray-600" />
             </button>
         </div>
+    )
+};
 
-        {/* Profile Info */}
+const ProfileInfo = ({ user, onEditClick }: ProfileProps) => {
+    return (
         <div className="bg-white rounded-lg shadow-md relative px-6 pb-6">
             <div className="flex flex-col md:flex-row items-start md:items-end -mt-16 md:-mt-20 mb-6">
             <div className="relative">
                 <img
-                src={user.avatar}
-                alt={user.name}
-                className="w-32 h-32 rounded-full border-4 border-white shadow-lg"
+                    src={user.avatar}
+                    alt={user.name}
+                    className="w-32 h-32 rounded-full border-4 border-white shadow-lg"
                 />
                 <button className="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100">
                 <Camera className="h-4 w-4 text-gray-600" />
@@ -57,14 +78,5 @@ export const Profile = ({ user, onEditClick }: ProfileProps) => {
             </div>
             </div>
         </div>
-
-        {/* User's Posts */}
-        <div className="mt-6">
-            <h3 className="text-xl font-bold mb-4">Posts</h3>
-            {userPosts.map(post => (
-            <Post key={post.id} post={post} />
-            ))}
-        </div>
-    </div>
     )
 };
