@@ -15,6 +15,7 @@
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.13.1",
     "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mongodb": "^6.13.0",
@@ -22,5 +23,8 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3"
+  },
+  "devDependencies": {
+    "@types/date-fns": "^2.6.3"
   }
 }
