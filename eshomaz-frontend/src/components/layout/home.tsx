@@ -1,23 +1,51 @@
 import { CreatePost } from "@/components/posts/create-post";
 import { Post } from "@/components/posts/post";
-import { feedPosts } from "@/data/mock-data";
+import { PostSkeleton } from "@/components/skeletons/post-skeleton";
+import useFetchAllPosts from "@/hooks/useFetchAllPosts";
 
-interface HomeProps {
-    newPost: string;
-    setNewPost: (value: string) => void;
-    onNewPost: (e: React.FormEvent) => void;
+interface Post {
+    comments: string
+    createdAt: string
+    email: string 
+    felling: {
+        emoji: string
+        text: string
+        color: string
+    }
+    firstName: string
+    lastName: string
+    likedBy: string
+    likes: number
+    photo: string
+    profilePhoto: string
+    shares: number
+    text: string
+    timeAgo: string
+    updatedAt: string
+    _id: string
 }
 
-export const Home = ({ newPost, setNewPost, onNewPost }: HomeProps) => {
+
+export const Home = () => {
+
+    const { 
+        data: allPosts, 
+        // isFetching: allPostsFetching, 
+        isLoading: isAllPostsLoading,
+        refetch: fetchAllPosts 
+    } = useFetchAllPosts();
+
+    const refetchAllPosts = async () => {
+        await fetchAllPosts();
+    };
+
     return (
         <div className="max-w-2xl mx-auto">
-            <CreatePost
-            newPost={newPost}
-            setNewPost={setNewPost}
-            onSubmit={onNewPost}
-            />
-            {feedPosts.map(post => (
-            <Post key={post.id} post={post} />
+            <CreatePost refetchAllPosts={refetchAllPosts}/>
+            { isAllPostsLoading ? Array.from({ length: 4 }).map((_, index) => (
+                <PostSkeleton key={index}/>
+            ))  : allPosts.map((post: Post) => (
+                <Post key={post._id} post={post} refetchAllPosts={refetchAllPosts}/>
             ))}
         </div>
     )

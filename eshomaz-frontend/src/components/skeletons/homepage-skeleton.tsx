@@ -2,8 +2,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export const HomePageSkeleton = () => {
     return (
-        <div className="min-h-screen bg-gray-100">
-            <header className="bg-white dark:bg-gray-400 shadow-md fixed w-full top-0 z-50">
+        <div className="min-h-screen bg-gray-800">
+            <header className="bg-white dark:bg-black shadow-md fixed w-full top-0 z-50">
                 <div className="container mx-auto px-4 py-3 flex items-center justify-between">
                     <div className="flex items-center space-x-4">
                         <Skeleton className="h-8 w-32 rounded" />
@@ -23,7 +23,7 @@ export const HomePageSkeleton = () => {
             </header>
 
             <div className="container mx-auto px-4 pt-20 pb-8">
-            <div className="bg-white dark:bg-gray-400 rounded-lg shadow-md p-4 mb-6">
+            <div className="bg-white dark:bg-black rounded-lg shadow-md p-4 mb-6">
                 <div className="flex space-x-4">
                     <Skeleton className="h-10 w-10 rounded-full" />
                     <Skeleton className="flex-grow h-10 rounded-full" />
@@ -37,7 +37,7 @@ export const HomePageSkeleton = () => {
                 </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-400 rounded-lg shadow-md mb-6">
+            <div className="bg-white dark:bg-black rounded-lg shadow-md mb-6">
                 <div className="p-4">
                     <div className="flex items-center space-x-3 mb-4">
                         <Skeleton className="h-10 w-10 rounded-full" />

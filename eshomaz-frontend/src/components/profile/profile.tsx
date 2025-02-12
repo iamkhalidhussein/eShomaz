@@ -1,28 +1,79 @@
-import { Camera, Edit2 } from 'lucide-react';
+import { Camera, Edit2, PenBox} from 'lucide-react';
 import { Post } from '@/components/posts/post';
-import { userPosts } from '@/data/mock-data';
+import { VerifiedBadge } from '@/components/ui/verified-badge';
+import { Toaster } from 'react-hot-toast';
+import { useState } from 'react';
+import { PostSkeleton } from '@/components/skeletons/post-skeleton';
+import useCoverImgUpdate from '@/hooks/useCoverImgUpdate';
+import useProfileImgUpdate from '@/hooks/useProfileImgUpdate';
+import useFetchUserPosts from '@/hooks/useFetchUserPosts';
 
 interface ProfileProps {
     user: {
-        name: string;
         bio: string;
-        avatar: string;
-        coverPhoto: string;
+        coverPhoto: string
+        createdAt: string
+        email: string
+        firstName: string
+        lastName: string
+        profilePhoto: string
+        updatedAt: string
+        verified: boolean
+        _id: string
     };
     onEditClick: () => void;
+    refetchUserInfo: () => void
+};
+
+interface Post {
+    comments: string
+    createdAt: string
+    email: string 
+    felling: {
+        emoji: string
+        text: string
+        color: string
+    }
+    firstName: string
+    lastName: string
+    likedBy: []
+    likes: number
+    photo: string
+    profilePhoto: string
+    shares: number
+    text: string
+    timeAgo: string
+    updatedAt: string
+    _id: string
 }
 
-export const Profile = ({ user, onEditClick }: ProfileProps) => {
+
+
+export const Profile = ({ user, onEditClick, refetchUserInfo }: ProfileProps) => {
+    //console.log(user);
+    
+    const { data: posts, isFetching: postsFetching, isLoading: postsLoading } = useFetchUserPosts(user);
+    
     return (
         <div className="max-w-4xl mx-auto">
-        <CoverPhoto coverPhoto={user.coverPhoto}/>
+        <Toaster/>
+        <CoverPhoto 
+            coverPhoto={user.coverPhoto} 
+            refetchUserInfo={refetchUserInfo}
+        />
 
-        <ProfileInfo user={user} onEditClick={onEditClick}/>
+        <ProfileInfo 
+            user={user} 
+            onEditClick={onEditClick}
+            refetchUserInfo={refetchUserInfo}
+        />
 
         <div className="mt-6">
             <h3 className="text-xl font-bold mb-4">Posts</h3>
-            {userPosts.map(post => (
-            <Post key={post.id} post={post} />
+            {posts?.length === 0 && postsFetching || postsLoading ? Array.from({ length: 4 }).map((_, index) => (
+                <PostSkeleton key={index}/>
+            )) : posts.map((post: Post) => (
+            <Post key={post._id} post={post} refetchAllPosts={() => {}}/>
             ))}
         </div>
     </div>
@@ -30,41 +81,76 @@ export const Profile = ({ user, onEditClick }: ProfileProps) => {
 };
 
 interface CoverPhotoProps {
-    coverPhoto: string
+    coverPhoto: string,
+    refetchUserInfo: () => void
 };
-const CoverPhoto = ({ coverPhoto }: CoverPhotoProps) => {
+
+const CoverPhoto = ({ coverPhoto, refetchUserInfo }: CoverPhotoProps) => {
+    const [imgUploading, setImgUploading] = useState(false);
+
+    const handleImgUpload = useCoverImgUpdate(setImgUploading, {refetchUserInfo});
+
     return (
-        <div className="relative h-80 rounded-lg overflow-hidden mb-4">
+        <div className="relative group bg-gray-500 h-80 rounded-lg overflow-hidden mb-4">
             <img
                 src={coverPhoto}
                 alt="Cover"
                 className="w-full h-full object-cover"
-            />
-            <button className="absolute bottom-4 right-4 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100">
-                <Camera className="h-5 w-5 text-gray-600" />
-            </button>
+            />  
+                <button disabled={imgUploading}>
+                    <label htmlFor="cover" className='opacity-0 group-hover:opacity-100 invisible group-hover:visible'>
+                        <PenBox className='absolute top-2 right-2 cursor-pointer'/>
+                    </label>
+                    <input
+                        id='cover'
+                        type="file"
+                        accept='image/*'
+                        onChange={handleImgUpload}
+                        className='hidden'
+                    />
+                </button>
         </div>
     )
 };
 
-const ProfileInfo = ({ user, onEditClick }: ProfileProps) => {
+const ProfileInfo = ({ user, onEditClick, refetchUserInfo }: ProfileProps) => {
+    const [imgUploading, setImgUploading] = useState(false);
+
+    const handleImgUpload = useProfileImgUpdate(setImgUploading, {refetchUserInfo});
+
     return (
-        <div className="bg-white rounded-lg shadow-md relative px-6 pb-6">
+        <div className="bg-white dark:bg-black rounded-lg shadow-md relative px-6 pb-6">
             <div className="flex flex-col md:flex-row items-start md:items-end -mt-16 md:-mt-20 mb-6">
             <div className="relative">
                 <img
-                    src={user.avatar}
-                    alt={user.name}
-                    className="w-32 h-32 rounded-full border-4 border-white shadow-lg"
+                    src={user.profilePhoto}
+                    alt='#'
+                    className="w-32 h-32 mt-2 rounded-full border-4 border-white shadow-lg"
                 />
-                <button className="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100">
-                <Camera className="h-4 w-4 text-gray-600" />
+                <button 
+                    className="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100"
+                    disabled={imgUploading}
+                >
+                    <label htmlFor="profile">
+                        <Camera className="h-4 w-4 text-gray-600"/>
+                    </label>
+                    <input
+                        id='profile'
+                        type="file"
+                        accept='image/*'
+                        onChange={handleImgUpload}
+                        className='hidden'
+                    />
                 </button>
             </div>
             <div className="mt-4 md:mt-0 md:ml-6 flex-grow">
                 <div className="flex items-center justify-between">
                 <div>
-                    <h2 className="text-3xl font-bold">{user.name}</h2>
+                    <div className='flex items-baseline gap-1'>
+                        <h2 className="text-3xl font-bold">{user.firstName}</h2>
+                        <h2 className="text-3xl font-bold">{user.lastName}</h2>
+                        {user.verified && <VerifiedBadge/>}
+                    </div>
                     <p className="text-gray-600">{user.bio}</p>
                 </div>
                 <button

@@ -5,7 +5,7 @@ export const WelcomePage = () => {
     const { login, isLoading } = useKindeAuth();
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br dark:bg-black from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
         
         <div className="max-w-4xl w-full">
             <div className="text-center space-y-8 p-8 bg-white/70 rounded-2xl backdrop-blur-sm shadow-xl">

@@ -1,8 +1,11 @@
+import { Suspense, lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { RootLayout } from '@/root-layout/root-layout';
-import { UserProfile } from '@/pages/user-profile';
 import { HomePage } from '@/pages/home-page';
 import { SecureRoute } from '@/routes/secure-route';
+import { UserProfileSkeleton } from '@/components/skeletons/user-profile-skeleton';
+
+const UserProfile = lazy(() => import('@/pages/user-profile'));
 
 export const router = createBrowserRouter([
     {
@@ -15,7 +18,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: '/profile',
-                element: <UserProfile/>
+                element: <Suspense fallback={<UserProfileSkeleton/>}><UserProfile/></Suspense>
             }
         ]
     },

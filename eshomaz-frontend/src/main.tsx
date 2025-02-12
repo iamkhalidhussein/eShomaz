@@ -4,6 +4,10 @@ import './index.css'
 import { RouterProvider } from 'react-router-dom';
 import { router } from '@/routes/router.tsx';
 import { KindeProvider } from '@kinde-oss/kinde-auth-react';
+import { UserInfoProvider } from '@/provider/user-info-context';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -13,7 +17,11 @@ createRoot(document.getElementById('root')!).render(
       logoutUri={window.location.origin}
       redirectUri={window.location.origin}
     >
-      <RouterProvider router={router}/>
+      <UserInfoProvider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router}/>
+        </QueryClientProvider>
+      </UserInfoProvider>
     </KindeProvider>
   </StrictMode>,
 )

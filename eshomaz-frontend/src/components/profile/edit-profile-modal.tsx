@@ -1,15 +1,17 @@
 import React, { FormEvent } from 'react';
-import { X } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 
 interface EditProfileModalProps {
     isOpen: boolean;
     onClose: () => void;
     editedUser: {
-        name: string;
+        firstName: string;
+        lastName: string;
         bio: string
     };
     setEditedUser: (user: any) => void;
-    onSubmit: (e: React.FormEvent) => void;
+    onSubmit: (e: React.FormEvent<Element>) => void;
+    infoUpdating: boolean
 };
 
 export const EditProfileModal = ({
@@ -17,12 +19,13 @@ export const EditProfileModal = ({
     onClose,
     editedUser,
     setEditedUser,
-    onSubmit
+    onSubmit,
+    infoUpdating
 }: EditProfileModalProps) => {
     if (!isOpen) return null;
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white rounded-lg p-6 w-full max-w-md">
+        <div className="bg-white dark:bg-black rounded-lg p-6 w-full max-w-md">
 
           <div className="flex justify-between items-center mb-4">
             <h3 className="text-xl font-bold">Edit Profile</h3>
@@ -32,16 +35,23 @@ export const EditProfileModal = ({
           <form onSubmit={onSubmit}>
             <div className="space-y-4">
               <InputField
-                label="Label"
+                label="First Name"
                 type="text"
-                value={editedUser.name}
-                onChange={(e) => setEditedUser({...editedUser, name: e.target.value})}
+                defaultValue={editedUser.firstName}
+                onChange={(e) => setEditedUser({...editedUser, firstName: e.target.value})}
+                rows={0}
+              />
+              <InputField
+                label="Last Name"
+                type="text"
+                defaultValue={editedUser.lastName}
+                onChange={(e) => setEditedUser({...editedUser, lastName: e.target.value})}
                 rows={0}
               />
               <InputField
                 label="Bio"
                 type="textarea"
-                value={editedUser.bio}
+                defaultValue={editedUser.bio}
                 onChange={(e) => setEditedUser({...editedUser, bio: e.target.value})}
                 rows={3}
               />
@@ -49,6 +59,7 @@ export const EditProfileModal = ({
             <ActionButtons
               onClose={onClose}
               onSubmit={onSubmit}
+              infoUpdating={infoUpdating}
             />
           </form>
         
@@ -72,7 +83,7 @@ const CloseButton = ({ onClick }: CloseButtonProps) => {
 interface InputFieldProps {
   label: string;
   type: string;
-  value: string;
+  defaultValue: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   rows?: number;
 };
@@ -80,7 +91,7 @@ interface InputFieldProps {
 const InputField = ({ 
   label, 
   type, 
-  value, 
+  defaultValue: value, 
   onChange, 
   rows 
 }: InputFieldProps) => {
@@ -91,17 +102,17 @@ const InputField = ({
       </label>
       {type === 'textarea' ? (
         <textarea
-          value={value}
+          defaultValue={value}
           onChange={onChange}
           rows={rows}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-3 dark:text-black py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       ) : (
         <input
           type={type}
-          value={value}
+          defaultValue={value}
           onChange={onChange}
-          className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-full px-3 py-2 border dark:text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         />
       )}
   </div>
@@ -111,9 +122,10 @@ const InputField = ({
 interface ActionButtonsProps {
   onClose: () => void;
   onSubmit: (e: FormEvent<Element>) => void;
+  infoUpdating: boolean
 }
 
-const ActionButtons = ({ onClose, onSubmit }: ActionButtonsProps) => {
+const ActionButtons = ({ onClose, onSubmit, infoUpdating }: ActionButtonsProps) => {
   return (
     <div className="mt-6 flex justify-end space-x-3">
       <button
@@ -127,8 +139,9 @@ const ActionButtons = ({ onClose, onSubmit }: ActionButtonsProps) => {
         type="submit"
         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         onSubmit={onSubmit}
+        disabled={infoUpdating}
       >
-        Save Changes
+        {infoUpdating ? <Loader2 className='animate-spin'/> : 'Save Changes'}
       </button>
   </div>
   )
