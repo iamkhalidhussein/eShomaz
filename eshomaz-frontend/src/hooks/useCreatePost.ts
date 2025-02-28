@@ -21,7 +21,6 @@ const useCreatePost = (
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log(newPost);
-        
         const imgFile = new FormData();
         if(newPost.photo && newPost.photo instanceof File) {
             imgFile.append('file', newPost.photo);
@@ -54,7 +53,8 @@ const useCreatePost = (
                         firstName: user.given_name,
                         lastName: user.family_name,
                         profilePhoto: personalInfo.profilePhoto,
-                        email: user.email
+                        email: user.email,
+                        verified: personalInfo.verified
                     };
 
                     console.log(post)

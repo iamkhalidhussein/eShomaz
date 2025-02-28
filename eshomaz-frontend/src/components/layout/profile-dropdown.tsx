@@ -25,8 +25,8 @@ export const ProfileDropdown = ({ button }: { button: React.ReactNode }) => {
     const { personalInfo } = useUserInfo();
     const { logout } = useKindeAuth();
 
-    const [theme, setTheme] = useState(() => {
-        return localStorage.getItem("eshomaz-theme") === "dark";
+    const [theme, setTheme] = useState<boolean>(() => {
+        return localStorage.getItem("eshomaz-theme") === "dark" || true;
     });
 
     const handleThemeChange = () => {
@@ -39,12 +39,12 @@ export const ProfileDropdown = ({ button }: { button: React.ReactNode }) => {
     }, [theme]);
     
     return (
-        <div className="bg-background flex items-start ">
-        <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+        <div className="bg-background flex items-start">
+        <DropdownMenu open={isOpen} onOpenChange={setIsOpen} >
             <DropdownMenuTrigger asChild>
                 {button}
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-80" align="end" forceMount>
+            <DropdownMenuContent className="md:w-80" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-2 p-2">
                 <p className="text-lg font-medium leading-none">{personalInfo.firstName} {personalInfo.lastName}</p>

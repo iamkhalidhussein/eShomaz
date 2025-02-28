@@ -4,10 +4,11 @@ import { useState } from 'react';
 import { Fellings } from '@/components/posts/fellings';
 import { Toaster } from 'react-hot-toast';
 import useCreatePost from '@/hooks/useCreatePost';
+import usePhotoUpload from '@/hooks/usePhotoUpload';
 
 interface CreatePostProps {
     refetchAllPosts: () => void;
-}
+};
 
 export const CreatePost = ({ refetchAllPosts }: CreatePostProps) => {
     const { personalInfo } = useUserInfo();
@@ -20,18 +21,7 @@ export const CreatePost = ({ refetchAllPosts }: CreatePostProps) => {
     // console.log(newPost)
     const [posting, setPosting] = useState(false);
 
-    const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if(!file) return;
-        if(file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setSelectedImage(reader.result as string);
-            }
-            reader.readAsDataURL(file);
-        }
-        setNewPost({...newPost, photo: file});
-    };
+    const handlePhotoUpload = usePhotoUpload(setSelectedImage, setNewPost, newPost);
 
     const removePhoto = () => {
         setSelectedImage(null);

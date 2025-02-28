@@ -23,7 +23,7 @@ export const useSaveUser = () => {
             const response = await axiosPublic.post('/users/save-user-info', userInfo)
             console.log(response);
         } catch (error) {
-            console.error("Error fetching user info:", error);
+            console.error("Error saving user info:", error);
         }
     };
 

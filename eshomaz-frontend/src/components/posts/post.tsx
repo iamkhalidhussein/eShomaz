@@ -2,6 +2,7 @@ import { MessageCircle, Send,  Share2, ThumbsUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useUserInfo } from '@/provider/user-info-context';
 import useAxiosPublic from '@/hooks/useAxiosPublic';
+import { VerifiedBadge } from '../ui/verified-badge';
 
 interface PostProps {
     post: {
@@ -23,6 +24,7 @@ interface PostProps {
         createdAt: string;
         email: string;
         comments: string
+        verified?: boolean
     };
     refetchAllPosts: () => void;
 };
@@ -44,7 +46,7 @@ export const Post = ({ post, refetchAllPosts }: PostProps) => {
     };
 
     return (
-        <div className="bg-white dark:bg-black rounded-lg shadow-md mb-6">
+        <div className="bg-white dark:bg-black w-full rounded-lg shadow-md mb-6">
             <div className="p-4">
                 <PostHeader
                     profilePhoto={post.profilePhoto}
@@ -52,6 +54,7 @@ export const Post = ({ post, refetchAllPosts }: PostProps) => {
                     lastName={post.lastName}
                     felling={post.felling}
                     timeAgo={post.timeAgo}
+                    verified={ post.email === personalInfo.email ? personalInfo.verified : post.verified }
                 />
                 <PostContent
                     photo={post.photo}
@@ -79,31 +82,35 @@ interface PostHeaderProps {
         color: string
     };
     timeAgo: string;
-} 
+    verified: boolean;
+};
+
 const PostHeader = ({ 
     profilePhoto, 
     firstName, 
     lastName, 
     felling, 
-    timeAgo 
+    timeAgo, 
+    verified 
 }: PostHeaderProps) => {
     return (
         <div className="flex items-center space-x-3 mb-4">
-      <img src={profilePhoto} alt="Profile" className="w-10 h-10 rounded-full" />
-      <div>
-        <div className="flex items-center">
-          <h3 className="font-semibold">
-            {firstName} {lastName}
-          </h3>
-          {felling && (
-            <Button variant="ghost" className="text-[#1877F2] border-0 hover:bg-gray-100 pointer-events-none">
-              Feeling {felling.text}
-              <span className="mr-2 text-xl">{felling.emoji}</span>
-            </Button>
-          )}
+        <img src={profilePhoto} alt="Profile" className="w-10 h-10 rounded-full" />
+        <div>
+            <div className="flex items-center">
+            <h3 className="font-semibold">
+                {firstName} {lastName}
+            </h3>
+            <span className='pl-1'>{verified && <VerifiedBadge/>}</span>
+            {felling && (
+                <Button variant="ghost" className="text-[#1877F2] border-0 hover:bg-gray-100 pointer-events-none">
+                Feeling {felling.text}
+                <span className="mr-2 text-xl">{felling.emoji}</span>
+                </Button>
+            )}
+            </div>
+            <p className="text-gray-500 text-sm">{timeAgo}</p>
         </div>
-        <p className="text-gray-500 text-sm">{timeAgo}</p>
-      </div>
     </div>
     )
 };
@@ -114,10 +121,10 @@ interface PostContentProps {
 }
 const PostContent = ({ text, photo }: PostContentProps) => {
     return (
-        <>
+        <div className='overflow-hidden'>
         <p className="mb-4">{text}</p>
         {photo && <img src={photo} alt="Post" className="w-full rounded-lg mb-4" />}
-        </>
+        </div>
     )
 };
 
@@ -151,9 +158,11 @@ const PostActions = ({
         </div>
     )
 };
+
 interface CommentInputProps {
     profilePhoto: string
 };
+
 const CommentInput = ({ profilePhoto }: CommentInputProps) => {
     return (
         <div className="px-4 py-3 border-t">

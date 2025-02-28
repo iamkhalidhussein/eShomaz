@@ -155,10 +155,10 @@ const ProfileInfo = ({ user, onEditClick, refetchUserInfo }: ProfileProps) => {
                 </div>
                 <button
                     onClick={onEditClick}
-                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center space-x-2"
+                    className="bg-blue-600 text-white px-4 md:py-2 py-1 md:mt-0 mt-5 rounded-lg hover:bg-blue-700 flex items-center space-x-2"
                 >
                     <Edit2 className="h-4 w-4" />
-                    <span>Edit Profile</span>
+                    <span>Edit</span>
                 </button>
                 </div>
             </div>
