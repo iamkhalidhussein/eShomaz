@@ -1,6 +1,7 @@
 {
     "name": "eShomaz",
     "short_name": "eShomaz",
+    "description": "Social Media Platform",
     "start_url": "/",
     "display": "standalone",
     "id": "ehsomaz-8226d",
