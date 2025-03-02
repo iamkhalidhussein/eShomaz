@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/header";
 import { Outlet } from "react-router-dom";
+import { SpeedInsights } from '@vercel/speed-insights/react';
 
 export const RootLayout = () => {
     return (
@@ -8,6 +9,7 @@ export const RootLayout = () => {
             <div className="container mx-auto px-3 pt-20 pb-8">
                 <Outlet/>
             </div>
+            <SpeedInsights/>
         </div>
     )
 };
