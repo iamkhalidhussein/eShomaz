@@ -11,9 +11,6 @@ importers:
       '@types/cors':
         specifier: ^2.8.17
         version: 2.8.17
-      '@types/express':
-        specifier: ^5.0.0
-        version: 5.0.0
       '@types/mongoose':
         specifier: ^5.11.97
         version: 5.11.97
@@ -57,6 +54,9 @@ importers:
       '@types/date-fns':
         specifier: ^2.6.3
         version: 2.6.3
+      '@types/express':
+        specifier: ^5.0.0
+        version: 5.0.0
 
 packages:
 
