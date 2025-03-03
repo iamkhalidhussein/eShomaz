@@ -17,7 +17,7 @@ const getPosts = async (req: Request, res: Response) => {
     try {
         const email = req.params.email;
         const searchQuery = { email: email };
-        const getPosts = await postModel.find(searchQuery);
+        const getPosts = await postModel.find(searchQuery).sort({ createdAt: - 1 });
         
         if(!getPosts.length) {
             res.status(201).json({ message: 'Post Got successfully', post: [], success: false })
@@ -37,8 +37,16 @@ const getPosts = async (req: Request, res: Response) => {
 
 const getAllPosts = async (req: Request, res: Response) => {
     try {
-        const getAllPosts = await postModel.find();
-        res.status(200).json({ message: 'Fetched All Posts successfully', posts: getAllPosts, success: true })
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 10;
+        
+        const skip = (page - 1) * limit;
+
+        const getAllPosts = await postModel.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+
+        const totalPostCount = await postModel.countDocuments();
+
+        res.status(200).json({ message: 'Fetched All Posts successfully', posts: getAllPosts, totalPostCount, success: true })
     } catch (error) {
         res.status(500).json({ error: error, message: 'error in postController getAllPosts()' });
     }

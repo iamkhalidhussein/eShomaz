@@ -20,6 +20,7 @@ const postSchema = new Schema(
         comments: { type: String, default: "" },
         shares: { type: Number, default: 0 },
         likedBy: { type: Array, default: [] },
+        verified: { type: Boolean, default: false },
     },
     { timestamps: true }
 );
