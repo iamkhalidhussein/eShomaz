@@ -8,7 +8,7 @@
     ],
     "routes": [
     {
-        "src": "/(.*)",
+        "src": "/eshomaz-backend",
         "dest": "index.ts",
         "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"]
     }
