@@ -12,14 +12,15 @@ export const SecureRoute = ({ children }: SecureRouteProps) => {
 
     if(isLoading) {
         return <HomePageSkeleton/>;
-    }
+    };
 
     console.log('user+auth', user, isAuthenticated);
+
     if(!user || !isAuthenticated) {
         return (
             <WelcomePage/>
         )
-    }
+    };
 
     return (
         <>

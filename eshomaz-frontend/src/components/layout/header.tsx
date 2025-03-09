@@ -32,8 +32,8 @@ export const Header = ({ currentPage, setCurrentPage }: HeaderProps) => {
     return (
         <header className="bg-white dark:bg-[#0A0A0A] shadow-md fixed w-full top-0 z-50">
         <div className="mx-auto px-4 py-3 flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-            <Link to="/">
+            <div className="md:flex items-center hidden space-x-4">
+            <Link to="/" className='md:block hidden'>
                 <h1 className="text-2xl font-bold text-blue-600">eShomaz</h1>
             </Link>
             <div className="relative">
@@ -45,16 +45,16 @@ export const Header = ({ currentPage, setCurrentPage }: HeaderProps) => {
                 <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
             </div>
             </div>
-            <nav className="hidden md:flex items-center space-x-2">
+            <nav className="flex w-full items-center md:justify-end justify-between space-x-2">
+            <Link to='/'>
             <NavItem icon={<Home />} active={currentPage === 'home'} onClick={() => setCurrentPage('home')} />
+            </Link>
+            <NavItem icon={<Search />} />
             <NavItem icon={<Users />} />
             <NavItem icon={<MessageCircle />} />
             <NavItem icon={<Bell />} />
             <ProfileDropdown button={button}/>
             </nav>
-            <button className="md:hidden">
-                <ProfileDropdown button={button}/>
-            </button>
         </div>
     </header>
     )
